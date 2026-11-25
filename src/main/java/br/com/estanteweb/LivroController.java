@@ -2,6 +2,8 @@ package br.com.estanteweb;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +32,9 @@ public class LivroController {
     @GetMapping("/livros/{id}")
     public String exibir(@PathVariable Long id, Model model) {
         Livro livro = repositorio.buscarPorId(id);
+        if (livro == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
         model.addAttribute("livro", livro);
         return "livro";
     }
